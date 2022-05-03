@@ -1,0 +1,20 @@
+scalar Time
+# Types
+type Menu {
+  id: ID!
+  itemName: String!
+  price: Int!
+  isStopSelling: Boolean!
+}
+
+type User {
+  id: ID!
+}
+
+# Define queries here
+type Query {
+  Menus: [Menu!]!
+  Menu(id: ID!): Menu
+}
+
+directive @isAuthenticated on FIELD_DEFINITION
