@@ -1,4 +1,3 @@
-scalar Time
 # Types
 type Menu {
   id: ID!
@@ -9,6 +8,19 @@ type Menu {
 
 type User {
   id: ID!
+}
+
+# input
+input MenuInput {
+  itemName: String!
+  price: Int!
+  isStopSelling: Boolean!
+}
+
+type Mutation {
+  # login(input: UserInput): String!
+  createMenu(input: MenuInput): Boolean!
+  updateMenu(input: MenuInput, id: ID!): Boolean!
 }
 
 # Define queries here

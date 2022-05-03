@@ -4,28 +4,32 @@ package orm
 
 import (
 	"fmt"
+	"graphql-go-template/config"
 	log "log"
 
 	//Imports the database dialect of choice
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"gorm.io/driver/postgres"
+	gormLogger "gorm.io/gorm/logger"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
-
-var autoMigrate, logMode, seedDB bool
-var dsn, dialect string
 
 // ORM struct to holds the gorm pointer to db
 type ORM struct {
 	DB *gorm.DB
 }
 
+var Gorm = &gorm.Config{
+	Logger: gormLogger.Default.LogMode(gormLogger.Error),
+	// Logger: gormLogger.Default.LogMode(gormLogger.Info),
+}
+
 // Factory creates a db connection with the selected dialect and connection string
-func Factory() (*ORM, error) {
+func Factory(env config.Database) (*ORM, error) {
 
 	databaseConnect := fmt.Sprintf("sslmode=%s host=%s port=%v dbname=%s password=%s user=%s", "disable", "localhost", "5432", "inventory-toll", "", "postgres")
 	fmt.Println("databaseConnect", databaseConnect)
-	db, err := gorm.Open("postgres", databaseConnect)
+	db, err := gorm.Open(postgres.Open(databaseConnect), Gorm)
 	if err != nil {
 		log.Panic("[ORM] err: ", err)
 	}
@@ -33,7 +37,6 @@ func Factory() (*ORM, error) {
 		DB: db,
 	}
 	// Log every SQL command on dev, @prod: this should be disabled?
-	db.LogMode(true)
 	// Automigrate tables
 	// err = migration.ServiceAutoMigration(orm.DB)
 

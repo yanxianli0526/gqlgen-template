@@ -39,9 +39,9 @@ func NewRootResolvers(orm *orm.ORM) generated.Config {
 	return c
 }
 
-// func (r *Resolver) Mutation() generated.MutationResolver {
-// 	return &mutationResolver{r}
-// }
+func (r *Resolver) Mutation() generated.MutationResolver {
+	return &mutationResolver{r}
+}
 func (r *Resolver) Query() generated.QueryResolver {
 	return &queryResolver{r}
 }

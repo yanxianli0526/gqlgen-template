@@ -2,6 +2,12 @@
 
 package gqlmodels
 
+type MenuInput struct {
+	ItemName      string `json:"itemName"`
+	Price         int    `json:"price"`
+	IsStopSelling bool   `json:"isStopSelling"`
+}
+
 type User struct {
 	ID string `json:"id"`
 }
