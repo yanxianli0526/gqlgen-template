@@ -8,8 +8,14 @@
 
 ### postgresql 設定
 
-確認 database/main 裡面的變數 databaseConnect 和本機端一樣(帳號,密碼,資料庫名稱,port...等)
+確認 config/env.go 裡面的變數和本機端一樣(帳號,密碼,資料庫名稱,port...等)
 如果有需要migration 可以在database/migration/jobs裡實作seed,實作完成後在可以在database/migration/main呼叫實作的seed(可以參考main裡面的gormigrate.New(db, gormigrate.DefaultOptions, []*gormigrate.Migration)
+
+### 執行方式
+
+1. `make run` 
+2. 用網頁打開 http://localhost:4000 
+3. 在網頁上使用這段`{categories{ id, name }}`進行查詢,有查到就畢業了.沒查到可以確認一下資料庫裡面的categories有沒有資料,可能是auto migrate有問題
 ### How to modify schema
 
 1. 修改 `internal/gql/schemas`
@@ -19,9 +25,5 @@
 5. 修改 GQLGen 產生的 Resolvers
 6. 可以參考 resolvers/Menu 和 models/Menu 裡面有新增的實作
 
-### 執行方式
 
-1. `make run` 
-2. 用網頁打開 http://localhost:4000 
-3. 在網頁上使用這段`{categories{ id, name }}`進行查詢,有查到就畢業了.沒查到可以確認一下資料庫裡面的categories有沒有資料,可能是auto migrate有問題
 

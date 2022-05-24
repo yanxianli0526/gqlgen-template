@@ -5,6 +5,7 @@ package orm
 import (
 	"fmt"
 	"graphql-go-template/config"
+	"graphql-go-template/internal/database/migration"
 	log "log"
 
 	//Imports the database dialect of choice
@@ -38,7 +39,7 @@ func Factory(env config.Database) (*ORM, error) {
 	}
 	// Log every SQL command on dev, @prod: this should be disabled?
 	// Automigrate tables
-	// err = migration.ServiceAutoMigration(orm.DB)
+	err = migration.UpdateMigration(orm.DB)
 
 	log.Println("[ORM] Database connection initialized.")
 	return orm, err

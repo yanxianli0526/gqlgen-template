@@ -3,7 +3,7 @@
 # for detailed .gqlgen.yml documentation.
 
 schema:
-  - internal/gql/schemas/schema.graphql
+  - internal/gql/schemas/*.graphql
 # Let gqlgen know where to put the generated server
 exec:
   filename: internal/gql/generated/exec.go
@@ -21,3 +21,7 @@ autobind: []
 models:
   Menu:
     model: graphql-go-template/internal/models.Menu
+  User:
+    model: graphql-go-template/internal/models.User
+  # JsonType:
+  #   model: graphql-go-template/internal/models.JsonType

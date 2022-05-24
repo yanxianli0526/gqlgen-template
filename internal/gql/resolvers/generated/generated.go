@@ -23,11 +23,23 @@ func (r *mutationResolver) UpdateMenu(ctx context.Context, input *gqlmodels.Menu
 	panic("not implemented")
 }
 
+func (r *mutationResolver) DeleteMenu(ctx context.Context, id string) (bool, error) {
+	panic("not implemented")
+}
+
 func (r *queryResolver) Menus(ctx context.Context) ([]*models.Menu, error) {
 	panic("not implemented")
 }
 
 func (r *queryResolver) Menu(ctx context.Context, id string) (*models.Menu, error) {
+	panic("not implemented")
+}
+
+func (r *queryResolver) Users(ctx context.Context) ([]*models.User, error) {
+	panic("not implemented")
+}
+
+func (r *userResolver) ID(ctx context.Context, obj *models.User) (string, error) {
 	panic("not implemented")
 }
 
@@ -40,6 +52,10 @@ func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResol
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
+// User returns generated.UserResolver implementation.
+func (r *Resolver) User() generated.UserResolver { return &userResolver{r} }
+
 type menuResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+type userResolver struct{ *Resolver }

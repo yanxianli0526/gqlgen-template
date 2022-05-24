@@ -13,7 +13,23 @@ type Menu struct {
 	UpdatedAt *time.Time
 	DeletedAt gorm.DeletedAt
 
-	ItemName      string `gorm:"not null"`
-	Price         int    `gorm:"not null"`
-	IsStopSelling bool   `gorm:"not null"`
+	// Recipe        datatypes.JSON
+	ItemName      string  `gorm:"not null"`
+	Price         float64 `gorm:"not null"`
+	IsStopSelling bool    `gorm:"not null"`
 }
+
+// func MarshalJsonType(a datatypes.JSON) graphql.Marshaler {
+// 	return graphql.WriterFunc(func(w io.Writer) {
+// 		data, _ := json.Marshal(a)
+// 		io.WriteString(w, string(data))
+// 	})
+// }
+
+// func UnmarshalJsonType(v interface{}) (datatypes.JSON, error) {
+// 	a, ok := v.(datatypes.JSON)
+// 	if !ok {
+// 		return nil, errors.New("failed to cast to datatypes.JSON")
+// 	}
+// 	return a, nil
+// }

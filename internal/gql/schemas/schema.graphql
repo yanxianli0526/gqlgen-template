@@ -1,32 +1,37 @@
+scalar JsonType
+enum PriceUnit {
+  "台幣"
+  NTD
+  "日幣"
+  JPY
+}
+
 # Types
 type Menu {
   id: ID!
   itemName: String!
-  price: Int!
+  price(unit: PriceUnit! = NTD): Float!
+  # recipe: JsonType
   isStopSelling: Boolean!
-}
-
-type User {
-  id: ID!
 }
 
 # input
 input MenuInput {
   itemName: String!
-  price: Int!
+  price: Float!
   isStopSelling: Boolean!
 }
 
 type Mutation {
-  # login(input: UserInput): String!
   createMenu(input: MenuInput): Boolean!
   updateMenu(input: MenuInput, id: ID!): Boolean!
+  deleteMenu(id: ID!): Boolean!
 }
 
 # Define queries here
 type Query {
-  Menus: [Menu!]!
-  Menu(id: ID!): Menu
+  menus: [Menu!]!
+  menu(id: ID!): Menu
 }
 
 directive @isAuthenticated on FIELD_DEFINITION

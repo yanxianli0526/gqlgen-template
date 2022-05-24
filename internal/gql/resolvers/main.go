@@ -48,6 +48,9 @@ func (r *Resolver) Query() generated.QueryResolver {
 func (r *Resolver) Menu() generated.MenuResolver {
 	return &menuResolver{r}
 }
+func (r *Resolver) User() generated.UserResolver {
+	return &userResolver{r}
+}
 
 type mutationResolver struct{ *Resolver }
 

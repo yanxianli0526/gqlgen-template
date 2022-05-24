@@ -1,0 +1,13 @@
+# Types
+type User {
+  id: ID!
+  firstName: String
+  lastName: String
+  idNumber: String
+}
+
+
+# Define queries here
+extend type  Query {
+  users: [User!]!
+}
