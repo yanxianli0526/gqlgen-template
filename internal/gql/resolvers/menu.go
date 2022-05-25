@@ -2,8 +2,9 @@ package resolvers
 
 import (
 	"context"
-	"fmt"
 	orm "graphql-go-template/internal/database"
+	"regexp"
+	"strings"
 
 	gqlmodels "graphql-go-template/internal/gql/models"
 	"graphql-go-template/internal/models"
@@ -66,36 +67,31 @@ func (r *mutationResolver) DeleteMenu(ctx context.Context, menuIdStr string) (bo
 }
 
 func (r *queryResolver) Menus(ctx context.Context) ([]*models.Menu, error) {
+	collectFieldsCtx := graphql.CollectFieldsCtx(ctx, nil)
 
-	// fmt.Println(r)
-	// fmt.Println(&r)
+	// 可以用這個減低db的負擔 只針對需要的欄位去進行select(其實可做不可不做)
+	var allName []string
+	for i := range collectFieldsCtx {
+		dbColumnName := ToSnakeCase(collectFieldsCtx[i].Name)
+		allName = append(allName, dbColumnName)
+	}
 
-	// fmt.Println("a", ctx)
-
-	menus, err := orm.GetMenus(r.ORM.DB)
+	menus, err := orm.GetMenus(r.ORM.DB, allName)
 	if err != nil {
 		return nil, err
+	}
+
+	for i := range menus {
+		if collectFieldsCtx[1].Arguments[0].Value.String() == "JPY" {
+			menus[i].Price = menus[i].Price * 4.32
+		}
 	}
 
 	return menus, nil
 }
 
 func (r *queryResolver) Menu(ctx context.Context, menuIdStr string) (*models.Menu, error) {
-	// rezCtx := graphql.GetResolverContext(ctx)
-	// satisfies := []string{"unit"}
-	// qaq1 := graphql.CollectFieldsCtx(ctx, satisfies)
-	qaq := graphql.CollectFieldsCtx(ctx, nil)
-	// aa := graphql.GetRequestContext(ctx).RawQuery
-	// bb := graphql.GetOperationContext(ctx).Variables
-	// cc := graphql.GetFieldContext(ctx)
-	// graphql.GetRequestContext(ctx)
-	// fmt.Println("aa", aa)
-	// fmt.Println("bb", bb)
-	// fmt.Println("cc", cc)
-	// fmt.Println("cc", qaq[1].Arguments[0])
-	// fmt.Println("rezCtx", rezCtx)
-	// fmt.Println("qaq", qaq)
-	// fmt.Println("qaq1", qaq1)
+	collectFieldsCtx := graphql.CollectFieldsCtx(ctx, nil)
 
 	menuId, err := uuid.Parse(menuIdStr)
 	if err != nil {
@@ -106,11 +102,7 @@ func (r *queryResolver) Menu(ctx context.Context, menuIdStr string) (*models.Men
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("qaq[1].Arguments[0].Value.String()", qaq[1].Arguments[0].Value.String())
-
-	menu.ItemName = qaq[1].Arguments[0].Value.String()
-	if qaq[1].Arguments[0].Value.String() == "JPY" {
-
+	if collectFieldsCtx[1].Arguments[0].Value.String() == "JPY" {
 		menu.Price = menu.Price * 4.32
 	}
 	return menu, nil
@@ -121,4 +113,11 @@ type menuResolver struct{ *Resolver }
 
 func (r *menuResolver) ID(ctx context.Context, obj *models.Menu) (string, error) {
 	return obj.ID.String(), nil
+}
+
+var matchFirstCap = regexp.MustCompile("([A-Z])")
+
+func ToSnakeCase(str string) string {
+	snake := matchFirstCap.ReplaceAllString(str, "_${1}")
+	return strings.ToLower(snake)
 }

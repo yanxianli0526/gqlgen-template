@@ -19,12 +19,15 @@ func GetMenuById(db *gorm.DB, menuId uuid.UUID) (*models.Menu, error) {
 	return menu, result.Error
 }
 
-func GetMenus(db *gorm.DB) ([]*models.Menu, error) {
+func GetMenus(db *gorm.DB, allName []string) ([]*models.Menu, error) {
 	var menus []*models.Menu
 
-	result := db.Find(&menus)
+	// 可以用這個減低db的負擔 只針對需要的欄位去進行select(其實可做不可不做 真的做起來 可能會遇到其他麻煩)
+	// 其實可以用下面的Find即可 並不會影響結果
+	db.Debug().Select(allName).Find(&menus)
+	// result := db.Find(&menus)
 
-	return menus, result.Error
+	return menus, nil
 
 }
 
