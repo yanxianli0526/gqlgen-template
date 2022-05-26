@@ -15,7 +15,7 @@
 
 1. `make run` 
 2. 用網頁打開 http://localhost:4000 
-3. 在網頁上使用這段`{categories{ id, name }}`進行查詢,有查到就畢業了.沒查到可以確認一下資料庫裡面的categories有沒有資料,可能是auto migrate有問題
+3. 在網頁上使用這段`{menus{ id, itemNaem }}`進行查詢,有查到就畢業了.沒查到可以確認一下資料庫裡面的menus有沒有資料,可能是auto migrate有問題
 ### How to modify schema
 
 1. 修改 `internal/gql/schemas`
