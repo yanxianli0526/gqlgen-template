@@ -4,7 +4,7 @@
 
 ### 設定 env
 
-可以參直接修改`config/env.go`後,改名為.env(這邊要注意一下 env 裡面的 HTTPPort 記得要用 4000 不然可能會遇到其他的小麻煩)
+可以參直接修改`config/env.go`(這邊要注意一下 env 裡面的 HTTPPort 記得要用 4000 不然可能會遇到其他的小麻煩)
 
 ### postgresql 設定
 
@@ -14,8 +14,8 @@
 ### 執行方式
 
 1. `make run` 
-2. 用網頁打開 http://localhost:4000 
-3. 在網頁上使用這段`{categories{ id, name }}`進行查詢,有查到就畢業了.沒查到可以確認一下資料庫裡面的categories有沒有資料,可能是auto migrate有問題
+2. 用網頁打開 http://localhost:4000  
+3. 有成功看到graphQL playground就畢業了
 ### How to modify schema
 
 1. 修改 `internal/gql/schemas`
