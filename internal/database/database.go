@@ -28,7 +28,7 @@ var Gorm = &gorm.Config{
 // Factory creates a db connection with the selected dialect and connection string
 func Factory(env config.Database) (*ORM, error) {
 
-	databaseConnect := fmt.Sprintf("sslmode=%s host=%s port=%v dbname=%s password=%s user=%s", "disable", "localhost", "5432", "inventory-toll", "", "postgres")
+	databaseConnect := fmt.Sprintf("sslmode=%s host=%s port=%v dbname=%s password=%s user=%s", env.DBSSLMode, env.DBHost, env.DBPort, env.DBname, env.DBPassword, env.DBUser)
 	fmt.Println("databaseConnect", databaseConnect)
 	db, err := gorm.Open(postgres.Open(databaseConnect), Gorm)
 	if err != nil {
