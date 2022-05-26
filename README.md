@@ -4,7 +4,7 @@
 
 ### 設定 env
 
-可以參直接修改`config/env.go`後,改名為.env(這邊要注意一下 env 裡面的 HTTPPort 記得要用 4000 不然可能會遇到其他的小麻煩)
+可以參直接修改`config/env.go`(這邊要注意一下 env 裡面的 HTTPPort 記得要用 4000 不然可能會遇到其他的小麻煩)
 
 ### postgresql 設定
 
