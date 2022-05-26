@@ -8,9 +8,8 @@ import (
 )
 
 var (
-	cdescription                   = "This is my first test cake"
-	firstCategory *models.Category = &models.Category{
-		Name: "Cake",
+	firstMenu *models.Menu = &models.Menu{
+		ItemName: "Cake",
 		// Desserts: []*models.Dessert{
 		// 	&models.Dessert{
 		// 		Name:           "Test Cake",
@@ -80,9 +79,9 @@ var (
 var SeedCategories *gormigrate.Migration = &gormigrate.Migration{
 	ID: "SEED_CATEGORIES",
 	Migrate: func(db *gorm.DB) error {
-		return db.Create(&firstCategory).Error
+		return db.Create(&firstMenu).Error
 	},
 	Rollback: func(db *gorm.DB) error {
-		return db.Delete(&firstCategory).Error
+		return db.Delete(&firstMenu).Error
 	},
 }
