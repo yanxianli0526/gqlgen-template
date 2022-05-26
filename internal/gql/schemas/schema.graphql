@@ -1,4 +1,6 @@
 scalar JsonType
+scalar JSON
+
 enum PriceUnit {
   "台幣"
   NTD
@@ -11,7 +13,7 @@ type Menu {
   id: ID!
   itemName: String!
   price(unit: PriceUnit! = NTD): Float!
-  # recipe: JsonType
+  recipe: JsonType
   isStopSelling: Boolean!
 }
 

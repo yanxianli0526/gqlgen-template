@@ -23,5 +23,5 @@ models:
     model: graphql-go-template/internal/models.Menu
   User:
     model: graphql-go-template/internal/models.User
-  # JsonType:
-  #   model: graphql-go-template/internal/models.JsonType
+  JsonType:
+    model: graphql-go-template/internal/models.JsonType

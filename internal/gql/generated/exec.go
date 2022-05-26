@@ -16,6 +16,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/introspection"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
+	"gorm.io/datatypes"
 )
 
 // region    ************************** generated!.gotpl **************************
@@ -52,6 +53,7 @@ type ComplexityRoot struct {
 		IsStopSelling func(childComplexity int) int
 		ItemName      func(childComplexity int) int
 		Price         func(childComplexity int, unit gqlmodels.PriceUnit) int
+		Recipe        func(childComplexity int) int
 	}
 
 	Mutation struct {
@@ -138,6 +140,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Menu.Price(childComplexity, args["unit"].(gqlmodels.PriceUnit)), true
+
+	case "Menu.recipe":
+		if e.complexity.Menu.Recipe == nil {
+			break
+		}
+
+		return e.complexity.Menu.Recipe(childComplexity), true
 
 	case "Mutation.createMenu":
 		if e.complexity.Mutation.CreateMenu == nil {
@@ -294,6 +303,8 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 
 var sources = []*ast.Source{
 	{Name: "internal/gql/schemas/schema.graphql", Input: `scalar JsonType
+scalar JSON
+
 enum PriceUnit {
   "台幣"
   NTD
@@ -306,7 +317,7 @@ type Menu {
   id: ID!
   itemName: String!
   price(unit: PriceUnit! = NTD): Float!
-  # recipe: JsonType
+  recipe: JsonType
   isStopSelling: Boolean!
 }
 
@@ -599,6 +610,38 @@ func (ec *executionContext) _Menu_price(ctx context.Context, field graphql.Colle
 	res := resTmp.(float64)
 	fc.Result = res
 	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Menu_recipe(ctx context.Context, field graphql.CollectedField, obj *models.Menu) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Menu",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Recipe, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(datatypes.JSON)
+	fc.Result = res
+	return ec.marshalOJsonType2gormᚗioᚋdatatypesᚐJSON(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Menu_isStopSelling(ctx context.Context, field graphql.CollectedField, obj *models.Menu) (ret graphql.Marshaler) {
@@ -2239,6 +2282,8 @@ func (ec *executionContext) _Menu(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&invalids, 1)
 			}
+		case "recipe":
+			out.Values[i] = ec._Menu_recipe(ctx, field, obj)
 		case "isStopSelling":
 			out.Values[i] = ec._Menu_isStopSelling(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -3067,6 +3112,21 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 		return graphql.Null
 	}
 	return graphql.MarshalBoolean(*v)
+}
+
+func (ec *executionContext) unmarshalOJsonType2gormᚗioᚋdatatypesᚐJSON(ctx context.Context, v interface{}) (datatypes.JSON, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := models.UnmarshalJsonType(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOJsonType2gormᚗioᚋdatatypesᚐJSON(ctx context.Context, sel ast.SelectionSet, v datatypes.JSON) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return models.MarshalJsonType(v)
 }
 
 func (ec *executionContext) marshalOMenu2ᚖgraphqlᚑgoᚑtemplateᚋinternalᚋmodelsᚐMenu(ctx context.Context, sel ast.SelectionSet, v *models.Menu) graphql.Marshaler {
